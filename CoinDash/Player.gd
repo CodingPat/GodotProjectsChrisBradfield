@@ -58,6 +58,7 @@ func start(pos):
 	set_process(true)
 	position=pos
 	$AnimatedSprite.animation="idle"
+	$AnimatedSprite.play()
 	
 func die():
 	$AnimatedSprite.play("hurt")

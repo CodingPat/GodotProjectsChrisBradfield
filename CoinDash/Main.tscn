@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Coin.tscn" type="PackedScene" id=2]
@@ -6,11 +6,12 @@
 [ext_resource path="res://Obstacle.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/grass.png" type="Texture" id=5]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=6]
-[ext_resource path="res://HUD.tscn" type="PackedScene" id=7]
-[ext_resource path="res://assets/audio/Coin.wav" type="AudioStream" id=8]
-[ext_resource path="res://assets/audio/Level.wav" type="AudioStream" id=9]
-[ext_resource path="res://assets/audio/Hit.wav" type="AudioStream" id=10]
-[ext_resource path="res://assets/audio/Powerup.wav" type="AudioStream" id=11]
+[ext_resource path="res://PlayerStart.gd" type="Script" id=7]
+[ext_resource path="res://HUD.tscn" type="PackedScene" id=8]
+[ext_resource path="res://assets/audio/Coin.wav" type="AudioStream" id=9]
+[ext_resource path="res://assets/audio/Level.wav" type="AudioStream" id=10]
+[ext_resource path="res://assets/audio/Hit.wav" type="AudioStream" id=11]
+[ext_resource path="res://assets/audio/Powerup.wav" type="AudioStream" id=12]
 
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
@@ -22,6 +23,8 @@ playtime = 30
 [node name="Background" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = 2.76086
+margin_bottom = 2.76086
 texture = ExtResource( 5 )
 stretch_mode = 2
 
@@ -31,25 +34,26 @@ stretch_mode = 2
 
 [node name="PlayerStart" type="Position2D" parent="."]
 position = Vector2( 240, 350 )
+script = ExtResource( 7 )
 
 [node name="GameTimer" type="Timer" parent="."]
 
-[node name="HUD" parent="." instance=ExtResource( 7 )]
+[node name="HUD" parent="." instance=ExtResource( 8 )]
 
 [node name="CoinSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 8 )
-
-[node name="LevelSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 9 )
 
-[node name="EndSound" type="AudioStreamPlayer" parent="."]
+[node name="LevelSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 10 )
+
+[node name="EndSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
 
 [node name="PowerUpTimer" type="Timer" parent="."]
 one_shot = true
 
 [node name="PowerUpSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 11 )
+stream = ExtResource( 12 )
 
 [node name="ObstacleContainer" type="Node" parent="."]
 [connection signal="hurt" from="Player" to="Player" method="_on_Player_hurt"]
