@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Coin.tscn" type="PackedScene" id=2]
@@ -13,6 +13,9 @@
 [ext_resource path="res://assets/audio/Hit.wav" type="AudioStream" id=11]
 [ext_resource path="res://assets/audio/Powerup.wav" type="AudioStream" id=12]
 
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 60, 60 )
+
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
 Coin = ExtResource( 2 )
@@ -23,17 +26,16 @@ playtime = 30
 [node name="Background" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 2.76086
-margin_bottom = 2.76086
 texture = ExtResource( 5 )
 stretch_mode = 2
 
 [node name="CoinContainer" type="Node" parent="."]
 
 [node name="Player" parent="." instance=ExtResource( 6 )]
+position = Vector2( 72.3138, 41.9886 )
 
 [node name="PlayerStart" type="Position2D" parent="."]
-position = Vector2( 240, 350 )
+position = Vector2( 240, 320 )
 script = ExtResource( 7 )
 
 [node name="GameTimer" type="Timer" parent="."]
@@ -56,6 +58,14 @@ one_shot = true
 stream = ExtResource( 12 )
 
 [node name="ObstacleContainer" type="Node" parent="."]
+
+[node name="RectObstaclesExcluded" type="Area2D" parent="." groups=[
+"excludedarea",
+]]
+position = Vector2( 240, 320 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RectObstaclesExcluded"]
+shape = SubResource( 1 )
 [connection signal="hurt" from="Player" to="Player" method="_on_Player_hurt"]
 [connection signal="hurt" from="Player" to="." method="_on_Player_hurt"]
 [connection signal="pickup" from="Player" to="." method="_on_Player_pickup"]
