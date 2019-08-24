@@ -4,8 +4,10 @@ extends Area2D
 # var a = 2
 # var b = "text"
 var screensize=Vector2()
+var radius
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	radius=get_node("CollisionShape2D").shape.radius
 	$Tween.interpolate_property($AnimatedSprite,'scale',$AnimatedSprite.scale,$AnimatedSprite.scale*1.5,0.2,Tween.TRANS_QUAD,Tween.EASE_IN_OUT)
 	$Tween.interpolate_property($AnimatedSprite,'modulate',Color(1,1,1,1),Color(1,1,1,0),0.2,Tween.TRANS_QUAD,Tween.EASE_IN_OUT)
 
@@ -16,14 +18,18 @@ func pickup():
 #func _process(delta):
 #	pass
 
+func random_position():
+	position=Vector2(rand_range(0+radius,screensize.x-radius),
+		rand_range(0+radius,screensize.y-radius))
 
 func _on_Tween_tween_completed(object, key):
 	queue_free()
 	
 
 func _on_Powerup_area_entered(area):
-	pass # Replace with function body.
-
+	if area.is_in_group("coins") or area.is_in_group("powerups") or area.is_in_group("excludedarea") or area.is_in_group("obstacles"):
+		random_position()
+	
 
 func _on_LifeTime_timeout():
 	queue_free()

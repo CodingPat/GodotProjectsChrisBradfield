@@ -5,6 +5,7 @@ export (PackedScene) var Coin
 export (PackedScene) var Powerup
 export (PackedScene) var Obstacle
 const maximumObstacles=6
+const maximumcoins=20
 
 export (int) var playtime
 var level:int=0
@@ -28,21 +29,29 @@ func new_game():
 	score=0
 	time_left=playtime+level*5
 	
-	$GameTimer.start()
+	
+	$Player.hide()
+	$Player.start($PlayerStart.position)
+	#disable collision detection for player while creating coins and obstacles
+	$Player/CollisionShape2D.disabled=true
 	spawn_coins()
 	
-	$Player.start($PlayerStart.position)
-	
-	#disable collision detection for player while creating obstacles
-	$Player/CollisionShape2D.disabled=true
 	delete_all_obstacles()
 	spawn_obstacles()
-	#give obstacles enough time to detect collision with excluded area (player starting position)
+	#give obstacles enough time to detect collisions of misplaced coins/obstacles
 	yield(get_tree().create_timer(0.1),'timeout')
-	# player collision detection is back
+	
+	#coins and obstacles are wel placed, show them
+	for o in $ObstacleContainer.get_children():
+		o.show()
+	for c in $CoinContainer.get_children():
+		c.show()
+	
+	# activate again player collision detection
 	$Player/CollisionShape2D.disabled=false
 	$Player.show()
-	
+
+	$GameTimer.start()
 	$PowerUpTimer.wait_time=rand_range(5,10)
 	$PowerUpTimer.start()
 	$HUD.update_score(score)
@@ -52,22 +61,25 @@ func new_game():
 
 	
 func spawn_coins():
+	
 	$LevelSound.play()
-	for i in range(4+level):
+	for i in range(min(4+level,maximumcoins)):
 		var c=Coin.instance()
+		
+		c.hide()
 		$CoinContainer.add_child(c)
 		c.screensize=screensize
-		c.position=Vector2(rand_range(0,screensize.x),
-		rand_range(0,screensize.y))
+		c.random_position()
 		
 
 func spawn_obstacles():
+	
 	for i in range(min(1+level,maximumObstacles)):
 		var o=Obstacle.instance()
+		o.hide()
 		$ObstacleContainer.add_child(o)
 		o.screensize=screensize
-		o.position=Vector2(rand_range(0,screensize.x),
-		rand_range(0,screensize.y))
+		o.random_position()
 		
 
 
@@ -122,7 +134,7 @@ func _on_PowerUpTimer_timeout():
 	var p=Powerup.instance()
 	add_child(p)
 	p.screensize=screensize
-	p.position=Vector2(rand_range(0,screensize.x),rand_range(0,screensize.y))
+	p.random_position()
 	
 
 

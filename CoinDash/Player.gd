@@ -8,6 +8,7 @@ extends Area2D
 export (int) var speed=350 #speed has no direction
 var velocity=Vector2()  # normalized velocity = a magnitude bewteen 0 and 1, and a direction
 var screensize=Vector2()
+var extent:Vector2
 
 signal pickup
 signal hurt
@@ -15,7 +16,8 @@ signal hurt
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#pass # Replace with function body.
+	extent=$CollisionShape2D.shape.extents
+	#print("extent player: "+str(extent))
 	screensize=get_viewport().size
 	#print("screen size: "+str(screensize))
 	$AnimatedSprite.play()
@@ -25,8 +27,8 @@ func _ready():
 func _process(delta):
 	get_input()
 	position+=velocity*speed*delta
-	position.x=clamp(position.x,0,screensize.x)
-	position.y=clamp(position.y,0,screensize.y)
+	position.x=clamp(position.x,0+extent.x,screensize.x-extent.x)
+	position.y=clamp(position.y,0+extent.y,screensize.y-extent.y)
 	
 		
 func get_input():

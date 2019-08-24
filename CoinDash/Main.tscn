@@ -66,8 +66,8 @@ position = Vector2( 240, 320 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RectObstaclesExcluded"]
 shape = SubResource( 1 )
-[connection signal="hurt" from="Player" to="Player" method="_on_Player_hurt"]
 [connection signal="hurt" from="Player" to="." method="_on_Player_hurt"]
+[connection signal="hurt" from="Player" to="Player" method="_on_Player_hurt"]
 [connection signal="pickup" from="Player" to="." method="_on_Player_pickup"]
 [connection signal="timeout" from="GameTimer" to="." method="_on_GameTimer_timeout"]
 [connection signal="start_game" from="HUD" to="." method="new_game"]
